@@ -10,13 +10,15 @@
 
 <div class="container mt-5">
 
-    <!-- رسالة النتيجة بعد الامتحان -->
-    {% if grade or grade == 0 %}
+{% if grade != None %}
+
+    <!-- صفحة النتيجة -->
     <div class="alert alert-success text-center shadow-sm">
         <h1 class="display-4">Congratulations!</h1>
         <p class="lead">
             You have successfully completed the exam for <b>{{ course.name }}</b>.
         </p>
+
         <h3 class="mt-3">
             Your Final Score:
             <span class="badge badge-success">
@@ -24,7 +26,8 @@
             </span>
         </h3>
     </div>
-    {% endif %}
+
+{% else %}
 
     <!-- معلومات الكورس -->
     <div class="card shadow mb-4">
@@ -35,40 +38,35 @@
     </div>
 
     <!-- نموذج الامتحان -->
-    <form id="quiz-form" action="{% url 'onlinecourse:submit' course.id %}" method="post">
+    <form action="{% url 'onlinecourse:submit' course.id %}" method="post">
         {% csrf_token %}
 
-        <!-- عرض الدروس -->
         {% for lesson in course.lesson_set.all %}
         <div class="alert alert-info mt-4">
             <h4>Lesson {{ forloop.counter }} : {{ lesson.title }}</h4>
         </div>
         {% endfor %}
 
-        <!-- عرض الأسئلة -->
         {% for question in course.question_set.all %}
-        <div class="card mt-3 shadow-sm">
+        <div class="card mt-3">
 
             <div class="card-header bg-dark text-white">
-                <h5 class="mb-0">{{ question.question_text }}</h5>
+                <h5>{{ question.question_text }}</h5>
             </div>
 
             <div class="card-body">
 
                 {% for choice in question.choice_set.all %}
-                <div class="form-check py-1">
+                <div class="form-check">
 
                     <input
                         type="checkbox"
                         name="choice"
-                        class="form-check-input"
-                        id="choice{{ choice.id }}"
                         value="{{ choice.id }}"
+                        class="form-check-input"
                     >
 
-                    <label class="form-check-label" for="choice{{ choice.id }}">
-                        {{ choice.choice_text }}
-                    </label>
+                    {{ choice.choice_text }}
 
                 </div>
                 {% endfor %}
@@ -78,11 +76,13 @@
         </div>
         {% endfor %}
 
-        <button type="submit" class="btn btn-primary btn-lg btn-block mt-5 mb-5 shadow">
+        <button type="submit" class="btn btn-primary btn-lg btn-block mt-5">
             Submit Exam
         </button>
 
     </form>
+
+{% endif %}
 
 </div>
 
