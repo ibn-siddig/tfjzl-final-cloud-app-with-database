@@ -9,7 +9,7 @@
     <div class="container mt-5">
         
         <!-- رسالة التهنئة ودرجة الطالب بعد الامتحان -->
-        {% if grade is not None %}
+        {% if grade != None and request.method == "POST" %}
             <div class="alert alert-success text-center shadow-sm">
                 <h1 class="display-4">Congratulations!</h1>
                 <p class="lead">You have successfully completed the exam for <b>{{ course.name }}</b>.</p>
