@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Course, Lesson, Question, Choice
+# أضفنا الموديلات الناقصة في سطر الـ import
+from .models import Course, Lesson, Instructor, Learner, Question, Choice, Submission
 
 # 1. تعريف كيف ستظهر الخيارات (Choices) تحت السؤال مباشرة
 class ChoiceInline(admin.StackedInline):
@@ -18,17 +19,20 @@ class QuestionAdmin(admin.ModelAdmin):
 
 # 4. تخصيص لوحة إدارة الدروس
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ['title', 'order']
+    list_display = ['title'] # شلنا order لو مش موجود في الموديل عشان ما يعلق
 
-# 5. تخصيص لوحة إدارة الدورة (لربط كل شيء ببعضه)
+# 5. تخصيص لوحة إدارة الدورة
 class CourseAdmin(admin.ModelAdmin):
     inlines = [QuestionInline]
     list_display = ('name', 'pub_date')
     list_filter = ['pub_date']
     search_fields = ['name', 'description']
 
-# تسجيل النماذج في لوحة الإدارة (Registration)
+# تسجيل كل النماذج (تأكد من تسجيل الموديلات السبعة المطلوبة)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Choice)
+admin.site.register(Instructor) # مهم جداً للصورة
+admin.site.register(Learner)    # مهم جداً للصورة
+admin.site.register(Submission) # مهم جداً للصورة
